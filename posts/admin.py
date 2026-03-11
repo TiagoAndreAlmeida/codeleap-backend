@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Post, Like
+from .models import Post, Like, Comment
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id', 'author', 'title', 'likes_count', 'created_datetime', 'updated_datetime', 'deleted')
+    list_display = ('id', 'author', 'title', 'likes_count', 'comments_count', 'created_datetime', 'updated_datetime', 'deleted')
     list_filter = ('deleted', 'created_datetime', 'author')
     search_fields = ('author__username', 'author__first_name', 'title', 'content')
-    readonly_fields = ('created_datetime', 'updated_datetime', 'likes_count')
+    readonly_fields = ('created_datetime', 'updated_datetime', 'likes_count', 'comments_count')
 
     def get_queryset(self, request):
         return Post.objects.all()
@@ -17,3 +17,13 @@ class LikeAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'user', 'post')
     search_fields = ('user__username', 'user__first_name', 'post__title')
     readonly_fields = ('created_at',)
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'author', 'post', 'created_datetime', 'updated_datetime', 'deleted')
+    list_filter = ('deleted', 'created_datetime', 'author', 'post')
+    search_fields = ('author__username', 'author__first_name', 'post__title', 'content')
+    readonly_fields = ('created_datetime', 'updated_datetime')
+
+    def get_queryset(self, request):
+        return Comment.objects.all()
