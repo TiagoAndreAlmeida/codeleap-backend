@@ -23,6 +23,13 @@ DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 # Allowed hosts as a list from .env string, with whitespace stripping
 ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')]
 
+# CSRF Trusted Origins for production
+# Django expects full URLs (protocol + domain) for CSRF trust
+CSRF_TRUSTED_ORIGINS = [f"https://{host.strip()}" for host in os.environ.get('ALLOWED_HOSTS', '').split(',') if host.strip()]
+# Also allow http for localhost/testing if needed
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += ["http://localhost", "http://127.0.0.1", "http://0.0.0.0"]
+
 # Application definition
 
 INSTALLED_APPS = [
