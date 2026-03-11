@@ -2,6 +2,8 @@
 
 This is a robust, scalable, and secure Django-based API for a social media platform, featuring Firebase Authentication, PostgreSQL database, and Docker containerization.
 
+**Live API:** [https://codeleap-api.upafiliado.com.br/](https://codeleap-api.upafiliado.com.br/)
+
 ## 🚀 Features
 
 - **Firebase Authentication**: Integrated with Google Login. The backend validates tokens and automatically provisions users.
