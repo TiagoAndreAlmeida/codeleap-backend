@@ -67,8 +67,8 @@ class CommentViewSet(mixins.UpdateModelMixin,
                      mixins.DestroyModelMixin, 
                      viewsets.GenericViewSet):
     """
-    ViewSet dedicada para editar e apagar comentários específicos.
-    A criação e listagem continuam no PostViewSet para manter o contexto.
+    ViewSet for editing and deleting specific comments.
+    Creation and listing remain in PostViewSet to maintain context.
     """
     queryset = Comment.objects.filter(deleted=False)
     serializer_class = CommentSerializer
@@ -76,10 +76,8 @@ class CommentViewSet(mixins.UpdateModelMixin,
 
     def perform_destroy(self, instance):
         with transaction.atomic():
-            # Soft Delete do comentário
             instance.deleted = True
             instance.save()
-            # Decrementa o contador do post original
             Post.objects.filter(pk=instance.post.pk, comments_count__gt=0).update(
                 comments_count=F('comments_count') - 1
             )
