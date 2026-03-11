@@ -19,6 +19,19 @@ This is a robust, scalable, and secure Django-based API for a social media platf
 
 ---
 
+## ⚡ Database Optimization
+
+To ensure high performance and scalability under heavy load, several optimization techniques were applied:
+
+- **Denormalized Counters**: `likes_count` and `comments_count` are stored directly on the `Post` model. This eliminates the need for expensive `COUNT(*)` queries during feed listing, resulting in `O(1)` read performance for these metrics.
+- **Atomic F() Expressions**: All counter updates use Django's `F()` expressions. This ensures that increments and decrements happen at the database level (SQL), preventing race conditions and ensuring data consistency even with multiple concurrent requests.
+- **Composite Indexing**: 
+  - A composite index was added for `[post_id, created_datetime]` in the `Comment` model to ensure that fetching paginated comments for a specific post is near-instant.
+  - A unique index for `[user_id, post_id]` in the `Like` model ensures database-level integrity and fast lookup for like states.
+- **Soft Delete Filtering**: Optimized queries ensure that deleted items are filtered out efficiently at the database level.
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Backend**: Django 6.0+, Django REST Framework (DRF)
